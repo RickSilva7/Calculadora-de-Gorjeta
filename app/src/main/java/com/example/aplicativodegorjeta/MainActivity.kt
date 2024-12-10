@@ -6,22 +6,21 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.aplicativodegorjeta.databinding.ActivityMainBinding
 import com.google.android.material.textfield.TextInputEditText
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val btnClean: Button = findViewById(R.id.btn_clean)
-        val btnDone: Button = findViewById(R.id.btn_done)
-        val edtTotal: TextInputEditText = findViewById(R.id.tie_number_total)
-        val edtPeople: TextInputEditText = findViewById(R.id.tie_number_people)
 
-        btnDone.setOnClickListener {
-            println("Henrique" + edtTotal.text)
-            println("Henrique" + edtPeople.text)
+        binding.btnDone.setOnClickListener {
+            println("Henrique" + binding.tieNumberTotal.text)
+            println("Henrique" + binding.tieNumberPeople.text)
         }
     }
 }
