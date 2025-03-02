@@ -1,5 +1,6 @@
 package com.example.aplicativodegorjeta
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.aplicativodegorjeta.databinding.ActivityMainBinding
@@ -12,59 +13,46 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        var percentage: Int = 0
-        binding.rgOptionOne.setOnCheckedChangeListener { _, isChecked ->
-            println(" opcao um:$isChecked")
-            if (isChecked) {
-                percentage = 10
-            }
-        }
-
-        binding.rgOptionTwo.setOnCheckedChangeListener { _, isChecked ->
-            println(" opcao dois:$isChecked")
-            if (isChecked) {
-                percentage = 15
-            }
-        }
-
-        binding.rgOptionThree.setOnCheckedChangeListener { _, isChecked ->
-            println(" opcao tres:$isChecked")
-            if (isChecked) {
-                percentage = 20
-            }
-        }
-
         binding.btnDone.setOnClickListener {
 
-            val totalTableTemp = binding.tieNumberTotal.text
-            val nPeopleTemp = binding.tieNumberPeople.text
+            val totalTableTemp = binding.tieTotal.text
+            val numPeopleTemp = binding.tieNumPeople.text
+            val percentegeTemp = binding.tiePercentege.text
+
 
             if (totalTableTemp?.isEmpty() == true ||
-                nPeopleTemp?.isEmpty() == true
+                numPeopleTemp?.isEmpty() == true ||
+                percentegeTemp?.isEmpty() == true
+
             ) {
                 Snackbar.make(
-                    binding.tieNumberTotal,
+                    binding.tieTotal,
                     " Preencha todos os campos",
                     Snackbar.LENGTH_LONG
                 )
                     .show()
             } else {
-                val totalTable: Float = binding.tieNumberTotal.text.toString().toFloat()
-                val nPeople: Int = binding.tieNumberPeople.text.toString().toInt()
-
+                val totalTable: Float = totalTableTemp.toString().toFloat()
+                val nPeople: Int = numPeopleTemp.toString().toInt()
+                val percentege: Int = percentegeTemp.toString().toInt()
                 val totalTemp = totalTable / nPeople
-                val tips = totalTemp * percentage / 100
+                val tips = totalTemp * percentegeTemp.toString().toInt() / 100
                 val totalWithTips = totalTemp + tips
-                binding.tvResult.text = "Total with tips: $totalWithTips"
+
+                val intent = Intent(this, SummaryActivity::class.java)
+                intent.apply {
+
+                    putExtra("totalTable", totalTable)
+                    putExtra("numPeople", nPeople)
+                    putExtra("percentege", percentege)
+                    putExtra("totalAmount", totalWithTips)
+                }
+                clean()
+                startActivity(intent)
             }
 
             binding.btnClean.setOnClickListener {
-                binding.tvResult.text = ""
-                binding.tieNumberPeople.setText("")
-                binding.tieNumberTotal.setText("")
-                binding.rgOptionOne.isChecked = false
-                binding.rgOptionTwo.isChecked = false
-                binding.rgOptionThree.isChecked = false
+                clean()
             }
 
         }
@@ -72,5 +60,11 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+
+    private fun clean() {
+        binding.tieTotal.setText("")
+        binding.tiePercentege.setText("")
+        binding.tieNumPeople.setText("")
+    }
 }
 
